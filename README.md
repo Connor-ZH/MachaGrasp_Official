@@ -1,9 +1,12 @@
-# Synergy Grasp Sampler
+# MachaGrasp
 
-This repository contains the release code for training and validating a
-multi-hand synergy grasp sampler. The released path includes model training,
-visual encoder pretraining, morphology metadata generation from hand URDFs, and
-GraspNet-based validation for Allegro, Barrett, and Shadow hands.
+This is the official implementation of
+[MachaGrasp: Morphology-Aware Cross-Embodiment Dexterous Hand Articulation Generation for Grasping](https://arxiv.org/abs/2510.06068).
+
+This repository contains the release code for training and validating the
+multi-hand articulation generation model. The released path includes model
+training, visual encoder pretraining, morphology metadata generation from hand
+URDFs, and GraspNet-based validation for Allegro, Barrett, and Shadow hands.
 
 The default validation flow uses 50 GraspNet wrist-pose candidates for each of
 the released 28 unseen objects, predicts hand articulations with the released
