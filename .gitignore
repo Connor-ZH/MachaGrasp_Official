@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Runtime outputs
+logs/
+results/
+runs/
+
+# Downloaded release files
+assets/
+release_archives/
+checkpoints/
+data/allegro/
+data/barrett/
+data/shadow/
+data/graspnet/
+data/splits/
+data/pointcloud_allegro/
+data/pointcloud_barrett/
+data/pointcloud_shadow/
+data/pointcloud_robotiq_3f/
+
+# Checkpoint outputs generated during local training
+checkpoints/*_best.pth
+checkpoints/*_force.pth
+checkpoints/pretrained_pointcloud_decoder.pth
+
+# Local editor/config files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store

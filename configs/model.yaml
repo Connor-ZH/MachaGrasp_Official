@@ -1,0 +1,79 @@
+embodiment_encoding: graphormer
+positional_encoding:
+  dropout: 0.1
+
+graphormer:
+  positional_encoding: none
+  attention:
+    embedding_init:
+      type: normal
+      sigma: 0.02
+    bias_before_softmax: True
+    enable_spatial_encoding: True
+    enable_parent_encoding: True
+    enable_child_encoding: True
+
+transformer:
+  enable_input_layer_norm: True
+  token_embed_dim: 512
+  feedforward_dim: 1024
+  num_attention_heads: 16
+  num_layers: 8
+  dropout: 0.1
+
+heads:
+  morphology_head:
+    units: [512]
+    activation: elu
+    output_dim: 512
+    squeeze_output_dim: False
+  eigengrasp_head:
+    count: 9
+    units: [256]
+    activation: elu
+    output_dim: 1
+    squeeze_output_dim: True
+
+max_dof_count: 44
+max_degree_count: 24
+
+share_embedding: True
+joint_embedding_dim: 64
+parent_link_embedding_dim: 32
+child_link_embedding_dim: 32
+
+tokenization:
+  includeParentLinkInfo: True
+  includeChildLinkInfo: True
+  jointFeatureDim: 11
+  parentLinkFeatureDim: 10
+  childLinkFeatureDim: 10
+
+morphology_pooling:
+  enable: True
+  method: attention
+  pooling_head: morphology_head
+
+policy_transformer:
+  dim_forward: 1024
+  n_head: 58
+  dropout: 0.1
+  encoder_layers: 8
+  batch_first: True
+  amplitude_model: 2
+
+visual_feature_dim: 1024
+visual_encoder_type: 0
+use_pretrain_visual_encoder: True
+visual_encoder_trainable: True
+
+dataset:
+  name: synergy
+  hands: [allegro, shadow, barrett]
+use_whitened_eigengrasp: True
+enable_energy_concentration_loss: False
+use_rot6d: True
+
+lr_scheduler_version: 2
+use_morphology_aware_loss: True
+morphology_aware_loss_type: 2
