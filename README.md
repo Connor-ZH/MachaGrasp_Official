@@ -248,3 +248,8 @@ and filtered with the classifier from
 transformer implementation is adapted from GET-Zero. The Isaac Gym simulation
 setup is adapted from DexGraspNet. The README organization is inspired by
 DRO-Grasp.
+
+## License
+
+This project is released under the MIT License. See [LICENSE](LICENSE) for
+details.
