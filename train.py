@@ -204,6 +204,7 @@ def train_model(
         model.train()
         running_loss = 0.0
         running_eigengrasp_loss = 0.0
+        seen_samples = 0
         predictions = []
         labels = []
 
@@ -249,11 +250,15 @@ def train_model(
 
             running_loss += loss.item() * articulations.size(0)
             running_eigengrasp_loss += eigengrasp_loss.item() * articulations.size(0)
+            seen_samples += articulations.size(0)
             predictions.append(articulations_pred.detach())
             labels.append(articulations.detach())
 
-        train_loss = running_loss / len(train_loader.dataset)
-        train_eigengrasp_loss = running_eigengrasp_loss / len(train_loader.dataset)
+            if args.max_train_steps is not None and len(predictions) >= args.max_train_steps:
+                break
+
+        train_loss = running_loss / seen_samples
+        train_eigengrasp_loss = running_eigengrasp_loss / seen_samples
         train_r2 = r_squared(torch.cat(labels, dim=0), torch.cat(predictions, dim=0))
         print(
             f"Epoch [{epoch + 1}/{args.num_epochs}] "
@@ -373,6 +378,12 @@ def main():
     parser.add_argument("--weight_decay", type=float, default=1e-4)
     parser.add_argument("--num_workers", type=int, default=48)
     parser.add_argument("--val_epoch", type=int, default=1)
+    parser.add_argument(
+        "--max_train_steps",
+        type=int,
+        default=None,
+        help="Optional debugging limit for quick training smoke tests.",
+    )
     parser.add_argument(
         "--data_root",
         default=os.environ.get("SYNERGY_GRASP_PROJECT_ROOT", str(PROJECT_ROOT)),

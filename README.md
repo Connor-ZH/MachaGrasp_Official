@@ -22,8 +22,25 @@ conda activate synergy_isaac
 python -m pip install -e .
 ```
 
+If the default environment name already exists, create the same environment
+under a new name:
+
+```bash
+conda env create -f environment.yml -n machagrasp_repro
+conda activate machagrasp_repro
+python -m pip install -e .
+```
+
 The environment includes `pytorch-kinematics==0.7.6`, imported in Python as
 `pytorch_kinematics`.
+
+On machines where the home cache directory is not writable, set temporary cache
+directories before running the checks or scripts:
+
+```bash
+export MPLCONFIGDIR=/tmp/matplotlib
+export XDG_CACHE_HOME=/tmp/machagrasp_cache
+```
 
 Check the base installation:
 
@@ -46,11 +63,16 @@ python -m pip install -e /path/to/isaacgym/python
 python -c "from isaacgym import gymapi; print('isaacgym ok')"
 ```
 
-If Isaac Gym cannot find Python/CUDA libraries at runtime:
+If Isaac Gym cannot find Python/CUDA libraries at runtime, or if validation
+falls back unexpectedly because CUDA libraries are not visible:
 
 ```bash
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
 ```
+
+If conda is interrupted while installing the pip dependencies, rerun the
+environment creation command. A partial environment is usually missing runtime
+packages such as `trimesh`, `pytorch-kinematics`, or `pandas`.
 
 ## Download Release Files
 
@@ -171,6 +193,20 @@ python validation.py \
   --headless
 ```
 
+For a quick validation smoke test after installing Isaac Gym, run one GraspNet
+attempt per released unseen object:
+
+```bash
+python validation.py \
+  --hands allegro \
+  --attempts_per_object 1 \
+  --batch_size 28 \
+  --inference_batch_size 64 \
+  --gpu 0 \
+  --headless \
+  --overwrite
+```
+
 ## Training
 
 The released trainer uses the default recipe: data augmentation, eigengrasp
@@ -184,6 +220,21 @@ python train.py \
   --regression_loss_weight 1.0 \
   --batch_size 256 \
   --num_workers 8
+```
+
+The released training set is large. To verify that training can load the data,
+load the pretrained visual encoder, compute the KAL loss, and run several
+optimization steps, use:
+
+```bash
+python train.py \
+  --data_root . \
+  --morphology_conf model \
+  --regression_loss_weight 1.0 \
+  --batch_size 2 \
+  --num_workers 0 \
+  --num_epochs 1 \
+  --max_train_steps 5
 ```
 
 ## Visual Encoder Pretraining

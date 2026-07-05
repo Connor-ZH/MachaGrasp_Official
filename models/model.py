@@ -77,7 +77,8 @@ class SynergyGrasper(nn.Module):
         )
 
     def load_pretrained_pcl_extractor_if_needed(self):
-        state_dict = torch.load(self.visual_encoder_ckpt_path)
+        device = next(self.pcl_feature_extractor.parameters()).device
+        state_dict = torch.load(self.visual_encoder_ckpt_path, map_location=device)
         self.pcl_feature_extractor.load_state_dict(state_dict)
         print(f"loaded pretrained visual encoder from {self.visual_encoder_ckpt_path}")
 
