@@ -1,5 +1,7 @@
 # MachaGrasp
 
+![Method overview](static/method_overview.png)
+
 This is the official implementation of
 [MachaGrasp: Morphology-Aware Cross-Embodiment Dexterous Hand Articulation Generation for Grasping](https://arxiv.org/abs/2510.06068).
 
